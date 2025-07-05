@@ -49,7 +49,7 @@ interface VideoForm {
   url: string;
 }
 
-const API_URL = "http://localhost:3000/api";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function App() {
   const [token, setToken] = useState<string>(
@@ -311,8 +311,8 @@ function App() {
 
   if (!isLoggedIn) {
     return (
-      <div className="min-h-screen  flex items-center justify-center bg-gray-100">
-        <div className="max-w-md w-full p-8 bg-white rounded-xl shadow-lg">
+      <div className="min-h-screen w-screen  flex items-center justify-center bg-gray-100">
+        <div className="w-full h-full p-8 bg-white rounded-xl shadow-lg">
           <h2 className="text-2xl font-bold text-black mb-6 text-center">
             Вход в админку
           </h2>
