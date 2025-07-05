@@ -1,0 +1,72 @@
+@import "tailwindcss";
+/* Основные стили */
+
+
+/* Стили для таблиц */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+th, td {
+  padding: 1rem;
+  text-align: left;
+}
+
+th {
+  background-color: #f0f9d7; /* Светлый салатовый для заголовков */
+  color: #000000;
+  font-weight: 600;
+}
+
+tr:nth-child(even) {
+  background-color: #f9fafb; /* Светло-серый для чередующихся строк */
+}
+
+tr:nth-child(odd) {
+  background-color: #ffffff; /* Белый для строк */
+}
+
+/* Стили для кнопок */
+button {
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Стили для полей ввода */
+input {
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+input:focus {
+  border-color: #A3E635; /* Салатовый при фокусе */
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+ 
+
+  th, td {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  input {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+  }
+}
