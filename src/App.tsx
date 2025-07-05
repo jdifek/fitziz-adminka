@@ -337,7 +337,7 @@ function App() {
           />
           <button
             onClick={handleLogin}
-            className="w-full p-3 bg-lime-400 text-black rounded-lg hover:bg-lime-500 transition-colors font-semibold"
+            className="w-full p-3 bg-lime-400 text-white rounded-lg hover:bg-lime-500 transition-colors font-semibold"
           >
             Войти
           </button>
