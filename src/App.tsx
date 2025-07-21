@@ -547,7 +547,7 @@ function App() {
         </h1>
         <nav className="flex flex-wrap justify-center gap-4 mb-8">
           <button
-            className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
+            className={`px-6 py-3 rounded-lg text-white font-semibold transition-colors ${
               activeTab === "masks"
                 ? "bg-lime-400 text-black"
                 : "bg-white text-black hover:bg-lime-100"
@@ -557,7 +557,7 @@ function App() {
             Маски
           </button>
           <button
-            className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
+            className={`px-6 py-3 rounded-lg text-white font-semibold transition-colors ${
               activeTab === "videos"
                 ? "bg-lime-400 text-black"
                 : "bg-white text-black hover:bg-lime-100"
@@ -567,7 +567,7 @@ function App() {
             Видео
           </button>
           <button
-            className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
+            className={`px-6 py-3 rounded-lg text-white font-semibold transition-colors ${
               activeTab === "users"
                 ? "bg-lime-400 text-black"
                 : "bg-white text-black hover:bg-lime-100"
@@ -577,7 +577,7 @@ function App() {
             Пользователи
           </button>
           <button
-            className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
+            className={`px-6 py-3 rounded-lg text-white font-semibold transition-colors ${
               activeTab === "features"
                 ? "bg-lime-400 text-black"
                 : "bg-white text-black hover:bg-lime-100"
@@ -587,7 +587,7 @@ function App() {
             Особенности
           </button>
           <button
-            className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
+            className={`px-6 py-3 rounded-lg text-white font-semibold transition-colors ${
               activeTab === "reviews"
                 ? "bg-lime-400 text-black"
                 : "bg-white text-black hover:bg-lime-100"
@@ -855,7 +855,7 @@ function App() {
                     <th className="p-4 text-left text-black font-semibold">URL</th>
                     <th className="p-4 text-left text-black font-semibold">Описание</th>
                     <th className="p-4 text-left text-black font-semibold">Длительность</th>
-                    <th className="p-4 text-left text-black font-semibold">Миниатюра</th>
+                    <th className="p-4 text-left text-black  font-semibold">Миниатюра</th>
                     <th className="p-4 text-left text-black font-semibold">Действия</th>
                   </tr>
                 </thead>
@@ -867,11 +867,11 @@ function App() {
                       <td className="p-4 text-black">{video.url ?? "-"}</td>
                       <td className="p-4 text-black">{video.description ?? "-"}</td>
                       <td className="p-4 text-black">{video.duration ?? "-"}</td>
-                      <td className="p-4 text-black">{video.thumbnailUrl ?? "-"}</td>
+<td className="p-4 text-black max-w-[200px] truncate">{video.thumbnailUrl ?? "-"}</td>
                       <td className="p-4">
                         <button
                           onClick={() => handleVideoEdit(video)}
-                          className="mr-4 text-lime-400 hover:text-lime-500 transition-colors"
+                          className="mr-4 mb-2 text-lime-400 hover:text-lime-500 transition-colors"
                         >
                           Редактировать
                         </button>
