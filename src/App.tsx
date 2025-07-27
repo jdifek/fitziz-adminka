@@ -5,6 +5,11 @@ import "./App.css";
 // Интерфейсы для типизации
 interface Mask {
   id: number;
+  extraFields?: {
+    id: number;
+    key: string;
+    value: string;
+  }[];
   name: string;
   instructions: string | null;
   imageUrl: string | null;
@@ -164,6 +169,7 @@ function App() {
     maskId: "",
   });
   const [featureEditingId, setFeatureEditingId] = useState<number | null>(null);
+  const [extraFields, setExtraFields] = useState([{ key: "", value: "" }]);
 
   // Состояния для отзывов
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -212,6 +218,7 @@ function App() {
     try {
       const payload = {
         ...maskForm,
+        extraFields,
         sensors: maskForm.sensors ? parseInt(maskForm.sensors) : null,
       };
       if (maskEditingId) {
@@ -794,6 +801,58 @@ function App() {
                 }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
+              <h3 className="text-xl font-semibold text-black">
+                Доп. характеристики
+              </h3>
+              {extraFields.map((field, index) => (
+                <div key={index} className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="Название"
+                    value={field.key}
+                    onChange={(e) =>
+                      setExtraFields((prev) => {
+                        const updated = [...prev];
+                        updated[index].key = e.target.value;
+                        return updated;
+                      })
+                    }
+                    className="flex-1 p-3 border border-gray-300 rounded-lg text-black placeholder:text-black/60"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Значение"
+                    value={field.value}
+                    onChange={(e) =>
+                      setExtraFields((prev) => {
+                        const updated = [...prev];
+                        updated[index].value = e.target.value;
+                        return updated;
+                      })
+                    }
+                    className="flex-1 p-3 border border-gray-300 rounded-lg text-black placeholder:text-black/60"
+                  />
+                  <button
+                    onClick={() =>
+                      setExtraFields((prev) =>
+                        prev.filter((_, i) => i !== index)
+                      )
+                    }
+                    className="text-red-500 hover:text-red-600"
+                  >
+                    Удалить
+                  </button>
+                </div>
+              ))}
+              <button
+                onClick={() =>
+                  setExtraFields([...extraFields, { key: "", value: "" }])
+                }
+                className="w-fit px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-white"
+              >
+                + Добавить поле
+              </button>
+
               <button
                 onClick={handleMaskSubmit}
                 className="px-6 py-3 bg-lime-400 text-white rounded-lg hover:bg-lime-500 transition-colors font-semibold"
@@ -854,6 +913,9 @@ function App() {
                       Дни доставки
                     </th>
                     <th className="p-4 text-left text-black font-semibold">
+                      Доп. характеристики
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
                       Действия
                     </th>
                   </tr>
@@ -893,7 +955,21 @@ function App() {
                         {mask.installment ?? "-"}
                       </td>
                       <td className="p-4 text-black">{mask.size ?? "-"}</td>
+
                       <td className="p-4 text-black">{mask.days ?? "-"}</td>
+                      <td className="p-4 text-black">
+                        {mask && mask.extraFields && mask.extraFields?.length > 0 ? (
+                          <ul className="space-y-1">
+                            {mask.extraFields.map((f, i) => (
+                              <li key={i}>
+                                <strong>{f.key}:</strong> {f.value}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          "-"
+                        )}
+                      </td>
                       <td className="p-4">
                         <button
                           onClick={() => handleMaskEdit(mask)}
