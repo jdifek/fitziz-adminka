@@ -103,9 +103,13 @@ interface UserForm {
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
 function App() {
-  const [token, setToken] = useState<string>(localStorage.getItem("adminToken") || "");
+  const [token, setToken] = useState<string>(
+    localStorage.getItem("adminToken") || ""
+  );
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!token);
-  const [activeTab, setActiveTab] = useState<"masks" | "videos" | "users" | "features" | "reviews">("masks");
+  const [activeTab, setActiveTab] = useState<
+    "masks" | "videos" | "users" | "features" | "reviews"
+  >("masks");
   const [error, setError] = useState<string>("");
 
   // Состояния для авторизации
@@ -147,12 +151,18 @@ function App() {
   // Состояния для пользователей
   const [users, setUsers] = useState<User[]>([]);
   const [userFilter, setUserFilter] = useState<string>("");
-  const [userForm, setUserForm] = useState<UserForm>({ telegramId: "", maskId: "" });
+  const [userForm, setUserForm] = useState<UserForm>({
+    telegramId: "",
+    maskId: "",
+  });
   const [userEditingId, setUserEditingId] = useState<string | null>(null);
 
   // Состояния для особенностей
   const [features, setFeatures] = useState<Feature[]>([]);
-  const [featureForm, setFeatureForm] = useState<FeatureForm>({ name: "", maskId: "" });
+  const [featureForm, setFeatureForm] = useState<FeatureForm>({
+    name: "",
+    maskId: "",
+  });
   const [featureEditingId, setFeatureEditingId] = useState<number | null>(null);
 
   // Состояния для отзывов
@@ -185,9 +195,12 @@ function App() {
   // Функции для масок
   const fetchMasks = async (): Promise<void> => {
     try {
-      const response: AxiosResponse<Mask[]> = await axios.get(`${API_URL}/masks`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response: AxiosResponse<Mask[]> = await axios.get(
+        `${API_URL}/masks`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setMasks(response.data);
     } catch (error) {
       console.error("Ошибка загрузки масок:", error);
@@ -271,9 +284,12 @@ function App() {
   // Функции для видео
   const fetchVideos = async (): Promise<void> => {
     try {
-      const response: AxiosResponse<Video[]> = await axios.get(`${API_URL}/videos`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response: AxiosResponse<Video[]> = await axios.get(
+        `${API_URL}/videos`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setVideos(response.data);
     } catch (error) {
       console.error("Ошибка загрузки видео:", error);
@@ -284,16 +300,26 @@ function App() {
   const handleVideoSubmit = async (): Promise<void> => {
     try {
       if (videoEditingId) {
-        await axios.put(`${API_URL}/admin/videos/${videoEditingId}`, videoForm, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await axios.put(
+          `${API_URL}/admin/videos/${videoEditingId}`,
+          videoForm,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
       } else {
         await axios.post(`${API_URL}/admin/videos`, videoForm, {
           headers: { Authorization: `Bearer ${token}` },
         });
       }
       fetchVideos();
-      setVideoForm({ title: "", url: "", description: "", duration: "", thumbnailUrl: "" });
+      setVideoForm({
+        title: "",
+        url: "",
+        description: "",
+        duration: "",
+        thumbnailUrl: "",
+      });
       setVideoEditingId(null);
     } catch (error) {
       console.error("Ошибка сохранения видео:", error);
@@ -327,10 +353,13 @@ function App() {
   // Функции для пользователей
   const fetchUsers = async (): Promise<void> => {
     try {
-      const response: AxiosResponse<User[]> = await axios.get(`${API_URL}/admin/users`, {
-        headers: { Authorization: `Bearer ${token}` },
-        params: userFilter ? { telegramId: userFilter } : undefined,
-      });
+      const response: AxiosResponse<User[]> = await axios.get(
+        `${API_URL}/admin/users`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          params: userFilter ? { telegramId: userFilter } : undefined,
+        }
+      );
       setUsers(response.data);
     } catch (error) {
       console.error("Ошибка загрузки пользователей:", error);
@@ -340,11 +369,15 @@ function App() {
 
   const handleUserSubmit = async (): Promise<void> => {
     try {
-      await axios.put(`${API_URL}/admin/users/${userForm.telegramId}`, {
-        maskId: userForm.maskId ? parseInt(userForm.maskId) : null,
-      }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.put(
+        `${API_URL}/admin/users/${userForm.telegramId}`,
+        {
+          maskId: userForm.maskId ? parseInt(userForm.maskId) : null,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       fetchUsers();
       setUserForm({ telegramId: "", maskId: "" });
       setUserEditingId(null);
@@ -377,9 +410,12 @@ function App() {
   // Функции для особенностей
   const fetchFeatures = async (): Promise<void> => {
     try {
-      const response: AxiosResponse<Feature[]> = await axios.get(`${API_URL}/admin/features`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response: AxiosResponse<Feature[]> = await axios.get(
+        `${API_URL}/admin/features`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setFeatures(response.data);
     } catch (error) {
       console.error("Ошибка загрузки особенностей:", error);
@@ -394,9 +430,13 @@ function App() {
         maskId: parseInt(featureForm.maskId),
       };
       if (featureEditingId) {
-        await axios.put(`${API_URL}/admin/features/${featureEditingId}`, payload, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await axios.put(
+          `${API_URL}/admin/features/${featureEditingId}`,
+          payload,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
       } else {
         await axios.post(`${API_URL}/admin/features`, payload, {
           headers: { Authorization: `Bearer ${token}` },
@@ -434,9 +474,12 @@ function App() {
   // Функции для отзывов
   const fetchReviews = async (): Promise<void> => {
     try {
-      const response: AxiosResponse<Review[]> = await axios.get(`${API_URL}/admin/reviews`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response: AxiosResponse<Review[]> = await axios.get(
+        `${API_URL}/admin/reviews`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setReviews(response.data);
     } catch (error) {
       console.error("Ошибка загрузки отзывов:", error);
@@ -453,9 +496,13 @@ function App() {
         maskId: reviewForm.maskId ? parseInt(reviewForm.maskId) : null,
       };
       if (reviewEditingId) {
-        await axios.put(`${API_URL}/admin/reviews/${reviewEditingId}`, payload, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await axios.put(
+          `${API_URL}/admin/reviews/${reviewEditingId}`,
+          payload,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
       } else {
         await axios.post(`${API_URL}/admin/reviews`, payload, {
           headers: { Authorization: `Bearer ${token}` },
@@ -509,11 +556,7 @@ function App() {
           <h2 className="text-2xl font-bold text-black mb-6 text-center">
             Вход в админку
           </h2>
-          {error && (
-            <p className="text-red-500 mb-4 text-center">
-              {error}
-            </p>
-          )}
+          {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
           <input
             type="text"
             placeholder="Логин"
@@ -608,11 +651,7 @@ function App() {
           </button>
         </nav>
 
-        {error && (
-          <p className="text-red-500 mb-4 text-center">
-            {error}
-          </p>
-        )}
+        {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
 
         {activeTab === "masks" && (
           <div className="bg-white rounded-xl shadow-lg p-6">
@@ -624,105 +663,135 @@ function App() {
                 type="text"
                 placeholder="Название маски"
                 value={maskForm.name}
-                onChange={(e) => setMaskForm({ ...maskForm, name: e.target.value })}
+                onChange={(e) =>
+                  setMaskForm({ ...maskForm, name: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <input
                 type="text"
                 placeholder="Инструкции"
                 value={maskForm.instructions}
-                onChange={(e) => setMaskForm({ ...maskForm, instructions: e.target.value })}
+                onChange={(e) =>
+                  setMaskForm({ ...maskForm, instructions: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <input
                 type="text"
                 placeholder="URL изображения"
                 value={maskForm.imageUrl}
-                onChange={(e) => setMaskForm({ ...maskForm, imageUrl: e.target.value })}
+                onChange={(e) =>
+                  setMaskForm({ ...maskForm, imageUrl: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <input
                 type="text"
                 placeholder="Цена"
                 value={maskForm.price}
-                onChange={(e) => setMaskForm({ ...maskForm, price: e.target.value })}
+                onChange={(e) =>
+                  setMaskForm({ ...maskForm, price: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <input
                 type="text"
                 placeholder="Вес"
                 value={maskForm.weight}
-                onChange={(e) => setMaskForm({ ...maskForm, weight: e.target.value })}
+                onChange={(e) =>
+                  setMaskForm({ ...maskForm, weight: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <input
                 type="text"
                 placeholder="Область обзора"
                 value={maskForm.viewArea}
-                onChange={(e) => setMaskForm({ ...maskForm, viewArea: e.target.value })}
+                onChange={(e) =>
+                  setMaskForm({ ...maskForm, viewArea: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <input
                 type="number"
                 placeholder="Сенсоры"
                 value={maskForm.sensors}
-                onChange={(e) => setMaskForm({ ...maskForm, sensors: e.target.value })}
+                onChange={(e) =>
+                  setMaskForm({ ...maskForm, sensors: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <input
                 type="text"
                 placeholder="Питание"
                 value={maskForm.power}
-                onChange={(e) => setMaskForm({ ...maskForm, power: e.target.value })}
+                onChange={(e) =>
+                  setMaskForm({ ...maskForm, power: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <input
                 type="text"
                 placeholder="Диапазон затемнения"
                 value={maskForm.shadeRange}
-                onChange={(e) => setMaskForm({ ...maskForm, shadeRange: e.target.value })}
+                onChange={(e) =>
+                  setMaskForm({ ...maskForm, shadeRange: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <input
                 type="text"
                 placeholder="Материал"
                 value={maskForm.material}
-                onChange={(e) => setMaskForm({ ...maskForm, material: e.target.value })}
+                onChange={(e) =>
+                  setMaskForm({ ...maskForm, material: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <input
                 type="text"
                 placeholder="Описание"
                 value={maskForm.description}
-                onChange={(e) => setMaskForm({ ...maskForm, description: e.target.value })}
+                onChange={(e) =>
+                  setMaskForm({ ...maskForm, description: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <input
                 type="text"
                 placeholder="Ссылка"
                 value={maskForm.link}
-                onChange={(e) => setMaskForm({ ...maskForm, link: e.target.value })}
+                onChange={(e) =>
+                  setMaskForm({ ...maskForm, link: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <input
                 type="text"
                 placeholder="Рассрочка"
                 value={maskForm.installment}
-                onChange={(e) => setMaskForm({ ...maskForm, installment: e.target.value })}
+                onChange={(e) =>
+                  setMaskForm({ ...maskForm, installment: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <input
                 type="text"
                 placeholder="Размер"
                 value={maskForm.size}
-                onChange={(e) => setMaskForm({ ...maskForm, size: e.target.value })}
+                onChange={(e) =>
+                  setMaskForm({ ...maskForm, size: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <input
                 type="text"
                 placeholder="Дни доставки"
                 value={maskForm.days}
-                onChange={(e) => setMaskForm({ ...maskForm, days: e.target.value })}
+                onChange={(e) =>
+                  setMaskForm({ ...maskForm, days: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <button
@@ -736,44 +805,93 @@ function App() {
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="bg-lime-100">
-                    <th className="p-4 text-left text-black font-semibold">ID</th>
-                    <th className="p-4 text-left text-black font-semibold">Название</th>
-                    <th className="p-4 text-left text-black font-semibold">Инструкции</th>
-                    <th className="p-4 text-left text-black font-semibold">Изображение</th>
-                    <th className="p-4 text-left text-black font-semibold">Цена</th>
-                    <th className="p-4 text-left text-black font-semibold">Вес</th>
-                    <th className="p-4 text-left text-black font-semibold">Область обзора</th>
-                    <th className="p-4 text-left text-black font-semibold">Сенсоры</th>
-                    <th className="p-4 text-left text-black font-semibold">Питание</th>
-                    <th className="p-4 text-left text-black font-semibold">Диапазон затемнения</th>
-                    <th className="p-4 text-left text-black font-semibold">Материал</th>
-                    <th className="p-4 text-left text-black font-semibold">Описание</th>
-                    <th className="p-4 text-left text-black font-semibold">Ссылка</th>
-                    <th className="p-4 text-left text-black font-semibold">Рассрочка</th>
-                    <th className="p-4 text-left text-black font-semibold">Размер</th>
-                    <th className="p-4 text-left text-black font-semibold">Дни доставки</th>
-                    <th className="p-4 text-left text-black font-semibold">Действия</th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      ID
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Название
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Инструкции
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Изображение
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Цена
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Вес
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Область обзора
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Сенсоры
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Питание
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Диапазон затемнения
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Материал
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Описание
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Ссылка
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Рассрочка
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Размер
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Дни доставки
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Действия
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {masks.map((mask, index) => (
-                    <tr key={mask.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                    <tr
+                      key={mask.id}
+                      className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                    >
                       <td className="p-4 text-black">{mask.id}</td>
                       <td className="p-4 text-black">{mask.name}</td>
-                      <td className="p-4 text-black">{mask.instructions ?? "-"}</td>
                       <td className="p-4 text-black">
-                        {mask.imageUrl ? <img src={mask.imageUrl} alt="" className="h-12" /> : "-"}
+                        {mask.instructions ?? "-"}
+                      </td>
+                      <td className="p-4 text-black">
+                        {mask.imageUrl ? (
+                          <img src={mask.imageUrl} alt="" className="h-12" />
+                        ) : (
+                          "-"
+                        )}
                       </td>
                       <td className="p-4 text-black">{mask.price ?? "-"}</td>
                       <td className="p-4 text-black">{mask.weight ?? "-"}</td>
                       <td className="p-4 text-black">{mask.viewArea ?? "-"}</td>
                       <td className="p-4 text-black">{mask.sensors ?? "-"}</td>
                       <td className="p-4 text-black">{mask.power ?? "-"}</td>
-                      <td className="p-4 text-black">{mask.shadeRange ?? "-"}</td>
+                      <td className="p-4 text-black">
+                        {mask.shadeRange ?? "-"}
+                      </td>
                       <td className="p-4 text-black">{mask.material ?? "-"}</td>
-                      <td className="p-4 text-black">{mask.description ?? "-"}</td>
+                      <td className="p-4 text-black">
+                        {mask.description ?? "-"}
+                      </td>
                       <td className="p-4 text-black">{mask.link ?? "-"}</td>
-                      <td className="p-4 text-black">{mask.installment ?? "-"}</td>
+                      <td className="p-4 text-black">
+                        {mask.installment ?? "-"}
+                      </td>
                       <td className="p-4 text-black">{mask.size ?? "-"}</td>
                       <td className="p-4 text-black">{mask.days ?? "-"}</td>
                       <td className="p-4">
@@ -808,35 +926,45 @@ function App() {
                 type="text"
                 placeholder="Название видео"
                 value={videoForm.title}
-                onChange={(e) => setVideoForm({ ...videoForm, title: e.target.value })}
+                onChange={(e) =>
+                  setVideoForm({ ...videoForm, title: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <input
                 type="text"
                 placeholder="URL видео"
                 value={videoForm.url}
-                onChange={(e) => setVideoForm({ ...videoForm, url: e.target.value })}
+                onChange={(e) =>
+                  setVideoForm({ ...videoForm, url: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <input
                 type="text"
                 placeholder="Описание"
                 value={videoForm.description}
-                onChange={(e) => setVideoForm({ ...videoForm, description: e.target.value })}
+                onChange={(e) =>
+                  setVideoForm({ ...videoForm, description: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <input
                 type="text"
                 placeholder="Длительность"
                 value={videoForm.duration}
-                onChange={(e) => setVideoForm({ ...videoForm, duration: e.target.value })}
+                onChange={(e) =>
+                  setVideoForm({ ...videoForm, duration: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <input
                 type="text"
                 placeholder="URL миниатюры"
                 value={videoForm.thumbnailUrl}
-                onChange={(e) => setVideoForm({ ...videoForm, thumbnailUrl: e.target.value })}
+                onChange={(e) =>
+                  setVideoForm({ ...videoForm, thumbnailUrl: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <button
@@ -850,24 +978,47 @@ function App() {
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="bg-lime-100">
-                    <th className="p-4 text-left text-black font-semibold">ID</th>
-                    <th className="p-4 text-left text-black font-semibold">Название</th>
-                    <th className="p-4 text-left text-black font-semibold">URL</th>
-                    <th className="p-4 text-left text-black font-semibold">Описание</th>
-                    <th className="p-4 text-left text-black font-semibold">Длительность</th>
-                    <th className="p-4 text-left text-black  font-semibold">Миниатюра</th>
-                    <th className="p-4 text-left text-black font-semibold">Действия</th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      ID
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Название
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      URL
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Описание
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Длительность
+                    </th>
+                    <th className="p-4 text-left text-black  font-semibold">
+                      Миниатюра
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Действия
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {videos.map((video, index) => (
-                    <tr key={video.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                    <tr
+                      key={video.id}
+                      className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                    >
                       <td className="p-4 text-black">{video.id}</td>
                       <td className="p-4 text-black">{video.title}</td>
                       <td className="p-4 text-black">{video.url ?? "-"}</td>
-                      <td className="p-4 text-black">{video.description ?? "-"}</td>
-                      <td className="p-4 text-black">{video.duration ?? "-"}</td>
-<td className="p-4 text-black max-w-[200px] truncate">{video.thumbnailUrl ?? "-"}</td>
+                      <td className="p-4 text-black">
+                        {video.description ?? "-"}
+                      </td>
+                      <td className="p-4 text-black">
+                        {video.duration ?? "-"}
+                      </td>
+                      <td className="p-4 text-black max-w-[200px] truncate">
+                        {video.thumbnailUrl ?? "-"}
+                      </td>
                       <td className="p-4">
                         <button
                           onClick={() => handleVideoEdit(video)}
@@ -900,13 +1051,17 @@ function App() {
                 type="text"
                 placeholder="Telegram ID"
                 value={userForm.telegramId}
-                onChange={(e) => setUserForm({ ...userForm, telegramId: e.target.value })}
+                onChange={(e) =>
+                  setUserForm({ ...userForm, telegramId: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
                 disabled={!!userEditingId}
               />
               <select
                 value={userForm.maskId}
-                onChange={(e) => setUserForm({ ...userForm, maskId: e.target.value })}
+                onChange={(e) =>
+                  setUserForm({ ...userForm, maskId: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black"
               >
                 <option value="">Выберите маску</option>
@@ -934,24 +1089,47 @@ function App() {
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="bg-lime-100">
-                    <th className="p-4 text-left text-black font-semibold">ID</th>
-                    <th className="p-4 text-left text-black font-semibold">Telegram ID</th>
-                    <th className="p-4 text-left text-black font-semibold">Имя</th>
-                    <th className="p-4 text-left text-black font-semibold">Телефон</th>
-                    <th className="p-4 text-left text-black font-semibold">Email</th>
-                    <th className="p-4 text-left text-black font-semibold">Маска</th>
-                    <th className="p-4 text-left text-black font-semibold">Действия</th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      ID
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Telegram ID
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Имя
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Телефон
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Email
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Маска
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Действия
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {users.map((user, index) => (
-                    <tr key={user.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                    <tr
+                      key={user.id}
+                      className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                    >
                       <td className="p-4 text-black">{user.id}</td>
                       <td className="p-4 text-black">{user.telegramId}</td>
-                      <td className="p-4 text-black">{user.firstName ?? "-"}</td>
+                      <td className="p-4 text-black">
+                        {user.firstName ?? "-"}
+                      </td>
                       <td className="p-4 text-black">{user.phone ?? "-"}</td>
                       <td className="p-4 text-black">{user.email ?? "-"}</td>
-                      <td className="p-4 text-black">{user.mask ? `${user.mask.name} (ID: ${user.maskId})` : "-"}</td>
+                      <td className="p-4 text-black">
+                        {user.mask
+                          ? `${user.mask.name} (ID: ${user.maskId})`
+                          : "-"}
+                      </td>
                       <td className="p-4">
                         <button
                           onClick={() => handleUserEdit(user)}
@@ -984,12 +1162,16 @@ function App() {
                 type="text"
                 placeholder="Название особенности"
                 value={featureForm.name}
-                onChange={(e) => setFeatureForm({ ...featureForm, name: e.target.value })}
+                onChange={(e) =>
+                  setFeatureForm({ ...featureForm, name: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <select
                 value={featureForm.maskId}
-                onChange={(e) => setFeatureForm({ ...featureForm, maskId: e.target.value })}
+                onChange={(e) =>
+                  setFeatureForm({ ...featureForm, maskId: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black"
               >
                 <option value="">Выберите маску</option>
@@ -1010,15 +1192,26 @@ function App() {
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="bg-lime-100">
-                    <th className="p-4 text-left text-black font-semibold">ID</th>
-                    <th className="p-4 text-left text-black font-semibold">Название</th>
-                    <th className="p-4 text-left text-black font-semibold">ID маски</th>
-                    <th className="p-4 text-left text-black font-semibold">Действия</th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      ID
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Название
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      ID маски
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Действия
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {features.map((feature, index) => (
-                    <tr key={feature.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                    <tr
+                      key={feature.id}
+                      className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                    >
                       <td className="p-4 text-black">{feature.id}</td>
                       <td className="p-4 text-black">{feature.name}</td>
                       <td className="p-4 text-black">{feature.maskId}</td>
@@ -1054,26 +1247,34 @@ function App() {
                 type="text"
                 placeholder="Имя пользователя"
                 value={reviewForm.userName}
-                onChange={(e) => setReviewForm({ ...reviewForm, userName: e.target.value })}
+                onChange={(e) =>
+                  setReviewForm({ ...reviewForm, userName: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <input
                 type="number"
                 placeholder="Рейтинг (1-5)"
                 value={reviewForm.rating}
-                onChange={(e) => setReviewForm({ ...reviewForm, rating: e.target.value })}
+                onChange={(e) =>
+                  setReviewForm({ ...reviewForm, rating: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <input
                 type="text"
                 placeholder="Комментарий"
                 value={reviewForm.comment}
-                onChange={(e) => setReviewForm({ ...reviewForm, comment: e.target.value })}
+                onChange={(e) =>
+                  setReviewForm({ ...reviewForm, comment: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
               />
               <select
                 value={reviewForm.maskId}
-                onChange={(e) => setReviewForm({ ...reviewForm, maskId: e.target.value })}
+                onChange={(e) =>
+                  setReviewForm({ ...reviewForm, maskId: e.target.value })
+                }
                 className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black"
               >
                 <option value="">Выберите маску</option>
@@ -1094,21 +1295,38 @@ function App() {
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="bg-lime-100">
-                    <th className="p-4 text-left text-black font-semibold">ID</th>
-                    <th className="p-4 text-left text-black font-semibold">Имя пользователя</th>
-                    <th className="p-4 text-left text-black font-semibold">Рейтинг</th>
-                    <th className="p-4 text-left text-black font-semibold">Комментарий</th>
-                    <th className="p-4 text-left text-black font-semibold">ID маски</th>
-                    <th className="p-4 text-left text-black font-semibold">Действия</th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      ID
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Имя пользователя
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Рейтинг
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Комментарий
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      ID маски
+                    </th>
+                    <th className="p-4 text-left text-black font-semibold">
+                      Действия
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {reviews.map((review, index) => (
-                    <tr key={review.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                    <tr
+                      key={review.id}
+                      className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                    >
                       <td className="p-4 text-black">{review.id}</td>
                       <td className="p-4 text-black">{review.userName}</td>
                       <td className="p-4 text-black">{review.rating}</td>
-                      <td className="p-4 text-black">{review.comment ?? "-"}</td>
+                      <td className="p-4 text-black">
+                        {review.comment ?? "-"}
+                      </td>
                       <td className="p-4 text-black">{review.maskId ?? "-"}</td>
                       <td className="p-4">
                         <button
