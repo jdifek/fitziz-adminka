@@ -92,6 +92,10 @@ interface FeatureForm {
   name: string;
   maskId: string;
 }
+interface Setting {
+  key: string;
+  value: string;
+}
 
 interface ReviewForm {
   userName: string;
@@ -105,7 +109,7 @@ interface UserForm {
   maskId: string;
 }
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3333/api";
 
 function App() {
   const [token, setToken] = useState<string>(
@@ -113,7 +117,7 @@ function App() {
   );
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!token);
   const [activeTab, setActiveTab] = useState<
-    "masks" | "videos" | "users" | "features" | "reviews"
+    "masks" | "settings" | "videos" | "users" | "features" | "reviews"
   >("masks");
   const [error, setError] = useState<string>("");
 
@@ -153,6 +157,9 @@ function App() {
   });
   const [videoEditingId, setVideoEditingId] = useState<number | null>(null);
 
+  const [settings, setSettings] = useState<Setting[]>([]);
+  const [pushMessage, setPushMessage] = useState<string>("");
+  const [addMaskMessage, setAddMaskMessage] = useState<string>("");
   // Состояния для пользователей
   const [users, setUsers] = useState<User[]>([]);
   const [userFilter, setUserFilter] = useState<string>("");
@@ -195,6 +202,58 @@ function App() {
       setError("");
     } catch {
       setError("Неверный логин или пароль");
+    }
+  };
+  // Функции для настроек
+  const fetchSettings = async (): Promise<void> => {
+    try {
+      const response: AxiosResponse<Setting[]> = await axios.get(
+        `${API_URL}/admin/settings`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setSettings(response.data);
+      const addMaskMsg = response.data.find(
+        (s) => s.key === "TG_MESSAGE_ON_ADD_MASK"
+      )?.value;
+      setAddMaskMessage(addMaskMsg || "");
+    } catch (error) {
+      console.error("Ошибка загрузки настроек:", error);
+      setError("Не удалось загрузить настройки");
+    }
+  };
+
+  const handlePushSubmit = async (): Promise<void> => {
+    try {
+      await axios.post(
+        `${API_URL}/admin/send-message`,
+        { text: pushMessage },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setPushMessage("");
+      setError("Сообщение успешно отправлено всем пользователям");
+    } catch (error) {
+      console.error("Ошибка отправки пуш-уведомления:", error);
+      setError("Не удалось отправить пуш-уведомление");
+    }
+  };
+
+  const handleAddMaskMessageSubmit = async (): Promise<void> => {
+    try {
+      await axios.post(
+        `${API_URL}/admin/settings`,
+        { key: "TG_MESSAGE_ON_ADD_MASK", value: addMaskMessage },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setError("Сообщение для добавления маски успешно обновлено");
+    } catch (error) {
+      console.error("Ошибка обновления сообщения для маски:", error);
+      setError("Не удалось обновить сообщение для маски");
     }
   };
 
@@ -553,6 +612,8 @@ function App() {
       fetchUsers();
       fetchFeatures();
       fetchReviews();
+      fetchSettings();
+
     }
   }, [isLoggedIn, userFilter]);
 
@@ -596,6 +657,16 @@ function App() {
           FITSIZ Admin Panel
         </h1>
         <nav className="flex flex-wrap justify-center gap-4 mb-8">
+        <button
+            className={`px-6 py-3 rounded-lg text-white font-semibold transition-colors ${
+              activeTab === "settings"
+                ? "bg-lime-400 text-black"
+                : "bg-white text-black hover:bg-lime-100"
+            } shadow-md`}
+            onClick={() => setActiveTab("settings")}
+          >
+            Настройки
+          </button>
           <button
             className={`px-6 py-3 rounded-lg text-white font-semibold transition-colors ${
               activeTab === "masks"
@@ -992,6 +1063,49 @@ function App() {
           </div>
         )}
 
+{activeTab === "settings" && (
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <h2 className="text-2xl font-bold text-black mb-6">
+              Настройки уведомлений
+            </h2>
+            <div className="flex flex-col gap-6 mb-6">
+              <div>
+                <h3 className="text-xl font-semibold text-black mb-2">
+                  Отправить пуш-уведомление всем пользователям
+                </h3>
+                <textarea
+                  placeholder="Введите сообщение для отправки всем пользователям"
+                  value={pushMessage}
+                  onChange={(e) => setPushMessage(e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60 min-h-[100px]"
+                />
+                <button
+                  onClick={handlePushSubmit}
+                  className="mt-2 px-6 py-3 bg-lime-400 text-white rounded-lg hover:bg-lime-500 transition-colors font-semibold"
+                >
+                  Отправить
+                </button>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-black mb-2">
+                  Сообщение при добавлении маски
+                </h3>
+                <textarea
+                  placeholder="Введите сообщение, которое будет отправляться при добавлении маски"
+                  value={addMaskMessage}
+                  onChange={(e) => setAddMaskMessage(e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60 min-h-[100px]"
+                />
+                <button
+                  onClick={handleAddMaskMessageSubmit}
+                  className="mt-2 px-6 py-3 bg-lime-400 text-white rounded-lg hover:bg-lime-500 transition-colors font-semibold"
+                >
+                  Сохранить
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         {activeTab === "videos" && (
           <div className="bg-white rounded-xl shadow-lg p-6">
             <h2 className="text-2xl font-bold text-black mb-6">
