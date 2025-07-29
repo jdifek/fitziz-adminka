@@ -157,7 +157,7 @@ function App() {
   });
   const [videoEditingId, setVideoEditingId] = useState<number | null>(null);
 
-  const [settings, setSettings] = useState<Setting[]>([]);
+  const [, setSettings] = useState<Setting[]>([]);
   const [pushMessage, setPushMessage] = useState<string>("");
   const [addMaskMessage, setAddMaskMessage] = useState<string>("");
   // Состояния для пользователей
