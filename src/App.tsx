@@ -5,26 +5,39 @@ import "./App.css";
 // Интерфейсы для типизации
 interface Mask {
   id: number;
-  extraFields?: {
+  ExtraField?: {
     id: number;
     key: string;
     value: string;
   }[];
-  name: string;
-  instructions: string | null;
-  imageUrl: string | null;
-  price: string | null;
+  model: string;
+  fullName: string;
+  article: string;
+  viewWindowSize: string | null;
+  visibleArea: string | null;
+  sensorsCount: number | null;
+  shadeLevel: string | null;
+  lightState: string | null;
+  weldingTypes: string | null;
+  responseTime: string | null;
+  operatingTemp: string | null;
+  shadeAdjustment: string | null;
+  batteryIndicator: string | null;
+  sensitivityAdjustment: string | null;
+  delayAdjustment: string | null;
+  testButton: string | null;
+  hdColorTech: string | null;
+  gradientFunction: string | null;
+  memoryModes: string | null;
+  opticalClass: string | null;
+  headband: string | null;
+  body: string | null;
+  sFireProtection: string | null;
   weight: string | null;
-  viewArea: string | null;
-  sensors: number | null;
-  power: string | null;
-  shadeRange: string | null;
-  material: string | null;
-  description: string | null; // Из CatalogItem
-  link: string | null; // Из CatalogItem
-  installment: string | null; // Из CatalogItem
-  size: string | null; // Из CatalogItem
-  days: string | null; // Из CatalogItem
+  retailPrice: string | null;
+  packageHeight: string | null;
+  packageWidth: string | null;
+  packageLength: string | null;
   features: Feature[];
   reviews: Review[];
 }
@@ -63,21 +76,34 @@ interface Review {
 }
 
 interface MaskForm {
-  name: string;
-  instructions: string;
-  imageUrl: string;
-  price: string;
-  weight: string;
-  viewArea: string;
-  sensors: string;
-  power: string;
-  shadeRange: string;
-  material: string;
-  description: string;
-  link: string;
-  installment: string;
-  size: string;
-  days: string;
+  model: string;              // Модель сварочной маски
+  fullName: string;           // Полное наименование
+  article: string;            // Артикул
+  viewWindowSize: string;     // Размер смотрового окна
+  visibleArea: string;        // Площадь видимой области
+  sensorsCount: string;       // Количество сенсоров
+  shadeLevel: string;         // Степени затемнения
+  lightState: string;         // Светлое состояние
+  weldingTypes: string;       // Подходящие виды сварки
+  responseTime: string;       // Время срабатывания
+  operatingTemp: string;      // Температура эксплуатации
+  shadeAdjustment: string;    // Регулировка затемнения
+  batteryIndicator: string;   // Индикатор низкого заряда батареи
+  sensitivityAdjustment: string; // Регулировка чувствительности
+  delayAdjustment: string;    // Регулировка времени задержки
+  testButton: string;         // Кнопка тест
+  hdColorTech: string;        // Технология естественной цветопередачи HD COLOR
+  gradientFunction: string;   // Функция «GRADIENT»
+  memoryModes: string;        // Память режимов
+  opticalClass: string;       // Оптический класс
+  headband: string;           // Оголовье
+  body: string;               // Корпус
+  sFireProtection: string;    // Технология защиты корпуса S-FIRE
+  weight: string;             // Масса нетто, кг
+  retailPrice: string;        // Розничная цена
+  packageHeight: string;      // Высота упаковки мм
+  packageWidth: string;       // Ширина упаковки мм
+  packageLength: string;      // Длинна упаковки мм
 }
 
 interface VideoForm {
@@ -128,21 +154,34 @@ function App() {
   // Состояния для масок
   const [masks, setMasks] = useState<Mask[]>([]);
   const [maskForm, setMaskForm] = useState<MaskForm>({
-    name: "",
-    instructions: "",
-    imageUrl: "",
-    price: "",
+    model: "",
+    fullName: "",
+    article: "",
+    viewWindowSize: "",
+    visibleArea: "",
+    sensorsCount: "",
+    shadeLevel: "",
+    lightState: "",
+    weldingTypes: "",
+    responseTime: "",
+    operatingTemp: "",
+    shadeAdjustment: "",
+    batteryIndicator: "",
+    sensitivityAdjustment: "",
+    delayAdjustment: "",
+    testButton: "",
+    hdColorTech: "",
+    gradientFunction: "",
+    memoryModes: "",
+    opticalClass: "",
+    headband: "",
+    body: "",
+    sFireProtection: "",
     weight: "",
-    viewArea: "",
-    sensors: "",
-    power: "",
-    shadeRange: "",
-    material: "",
-    description: "",
-    link: "",
-    installment: "",
-    size: "",
-    days: "",
+    retailPrice: "",
+    packageHeight: "",
+    packageWidth: "",
+    packageLength: "",
   });
   const [maskEditingId, setMaskEditingId] = useState<number | null>(null);
 
@@ -203,6 +242,39 @@ function App() {
     } catch {
       setError("Неверный логин или пароль");
     }
+  };
+  const handleMaskEdit = (mask: Mask): void => {
+    setMaskForm({
+      model: mask.model || "",
+      fullName: mask.fullName || "",
+      article: mask.article || "",
+      viewWindowSize: mask.viewWindowSize || "",
+      visibleArea: mask.visibleArea || "",
+      sensorsCount: mask.sensorsCount?.toString() || "",
+      shadeLevel: mask.shadeLevel || "",
+      lightState: mask.lightState || "",
+      weldingTypes: mask.weldingTypes || "",
+      responseTime: mask.responseTime || "",
+      operatingTemp: mask.operatingTemp || "",
+      shadeAdjustment: mask.shadeAdjustment || "",
+      batteryIndicator: mask.batteryIndicator || "",
+      sensitivityAdjustment: mask.sensitivityAdjustment || "",
+      delayAdjustment: mask.delayAdjustment || "",
+      testButton: mask.testButton || "",
+      hdColorTech: mask.hdColorTech || "",
+      gradientFunction: mask.gradientFunction || "",
+      memoryModes: mask.memoryModes || "",
+      opticalClass: mask.opticalClass || "",
+      headband: mask.headband || "",
+      body: mask.body || "",
+      sFireProtection: mask.sFireProtection || "",
+      weight: mask.weight || "",
+      retailPrice: mask.retailPrice || "",
+      packageHeight: mask.packageHeight || "",
+      packageWidth: mask.packageWidth || "",
+      packageLength: mask.packageLength || "",
+    });
+    setMaskEditingId(mask.id);
   };
   // Функции для настроек
   const fetchSettings = async (): Promise<void> => {
@@ -278,7 +350,7 @@ function App() {
       const payload = {
         ...maskForm,
         extraFields,
-        sensors: maskForm.sensors ? parseInt(maskForm.sensors) : null,
+        sensorsCount: maskForm.sensorsCount ? parseInt(maskForm.sensorsCount) : null,
       };
       if (maskEditingId) {
         await axios.put(`${API_URL}/admin/masks/${maskEditingId}`, payload, {
@@ -291,21 +363,34 @@ function App() {
       }
       fetchMasks();
       setMaskForm({
-        name: "",
-        instructions: "",
-        imageUrl: "",
-        price: "",
+        model: "",
+        fullName: "",
+        article: "",
+        viewWindowSize: "",
+        visibleArea: "",
+        sensorsCount: "",
+        shadeLevel: "",
+        lightState: "",
+        weldingTypes: "",
+        responseTime: "",
+        operatingTemp: "",
+        shadeAdjustment: "",
+        batteryIndicator: "",
+        sensitivityAdjustment: "",
+        delayAdjustment: "",
+        testButton: "",
+        hdColorTech: "",
+        gradientFunction: "",
+        memoryModes: "",
+        opticalClass: "",
+        headband: "",
+        body: "",
+        sFireProtection: "",
         weight: "",
-        viewArea: "",
-        sensors: "",
-        power: "",
-        shadeRange: "",
-        material: "",
-        description: "",
-        link: "",
-        installment: "",
-        size: "",
-        days: "",
+        retailPrice: "",
+        packageHeight: "",
+        packageWidth: "",
+        packageLength: "",
       });
       setMaskEditingId(null);
     } catch (error) {
@@ -314,26 +399,7 @@ function App() {
     }
   };
 
-  const handleMaskEdit = (mask: Mask): void => {
-    setMaskForm({
-      name: mask.name,
-      instructions: mask.instructions || "",
-      imageUrl: mask.imageUrl || "",
-      price: mask.price || "",
-      weight: mask.weight || "",
-      viewArea: mask.viewArea || "",
-      sensors: mask.sensors?.toString() || "",
-      power: mask.power || "",
-      shadeRange: mask.shadeRange || "",
-      material: mask.material || "",
-      description: mask.description || "",
-      link: mask.link || "",
-      installment: mask.installment || "",
-      size: mask.size || "",
-      days: mask.days || "",
-    });
-    setMaskEditingId(mask.id);
-  };
+
 
   const handleMaskDelete = async (id: number): Promise<void> => {
     try {
@@ -737,141 +803,202 @@ function App() {
               Управление масками
             </h2>
             <div className="flex flex-wrap gap-4 mb-6">
-              <input
-                type="text"
-                placeholder="Название маски"
-                value={maskForm.name}
-                onChange={(e) =>
-                  setMaskForm({ ...maskForm, name: e.target.value })
-                }
-                className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
-              />
-              <input
-                type="text"
-                placeholder="Инструкции"
-                value={maskForm.instructions}
-                onChange={(e) =>
-                  setMaskForm({ ...maskForm, instructions: e.target.value })
-                }
-                className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
-              />
-              <input
-                type="text"
-                placeholder="URL изображения"
-                value={maskForm.imageUrl}
-                onChange={(e) =>
-                  setMaskForm({ ...maskForm, imageUrl: e.target.value })
-                }
-                className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
-              />
-              <input
-                type="text"
-                placeholder="Цена"
-                value={maskForm.price}
-                onChange={(e) =>
-                  setMaskForm({ ...maskForm, price: e.target.value })
-                }
-                className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
-              />
-              <input
-                type="text"
-                placeholder="Вес"
-                value={maskForm.weight}
-                onChange={(e) =>
-                  setMaskForm({ ...maskForm, weight: e.target.value })
-                }
-                className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
-              />
-              <input
-                type="text"
-                placeholder="Область обзора"
-                value={maskForm.viewArea}
-                onChange={(e) =>
-                  setMaskForm({ ...maskForm, viewArea: e.target.value })
-                }
-                className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
-              />
-              <input
-                type="number"
-                placeholder="Сенсоры"
-                value={maskForm.sensors}
-                onChange={(e) =>
-                  setMaskForm({ ...maskForm, sensors: e.target.value })
-                }
-                className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
-              />
-              <input
-                type="text"
-                placeholder="Питание"
-                value={maskForm.power}
-                onChange={(e) =>
-                  setMaskForm({ ...maskForm, power: e.target.value })
-                }
-                className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
-              />
-              <input
-                type="text"
-                placeholder="Диапазон затемнения"
-                value={maskForm.shadeRange}
-                onChange={(e) =>
-                  setMaskForm({ ...maskForm, shadeRange: e.target.value })
-                }
-                className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
-              />
-              <input
-                type="text"
-                placeholder="Материал"
-                value={maskForm.material}
-                onChange={(e) =>
-                  setMaskForm({ ...maskForm, material: e.target.value })
-                }
-                className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
-              />
-              <input
-                type="text"
-                placeholder="Описание"
-                value={maskForm.description}
-                onChange={(e) =>
-                  setMaskForm({ ...maskForm, description: e.target.value })
-                }
-                className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
-              />
-              <input
-                type="text"
-                placeholder="Ссылка"
-                value={maskForm.link}
-                onChange={(e) =>
-                  setMaskForm({ ...maskForm, link: e.target.value })
-                }
-                className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
-              />
-              <input
-                type="text"
-                placeholder="Рассрочка"
-                value={maskForm.installment}
-                onChange={(e) =>
-                  setMaskForm({ ...maskForm, installment: e.target.value })
-                }
-                className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
-              />
-              <input
-                type="text"
-                placeholder="Размер"
-                value={maskForm.size}
-                onChange={(e) =>
-                  setMaskForm({ ...maskForm, size: e.target.value })
-                }
-                className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
-              />
-              <input
-                type="text"
-                placeholder="Дни доставки"
-                value={maskForm.days}
-                onChange={(e) =>
-                  setMaskForm({ ...maskForm, days: e.target.value })
-                }
-                className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
-              />
+            <input
+  type="text"
+  placeholder="Модель сварочной маски"
+  value={maskForm.model}
+  onChange={(e) => setMaskForm({ ...maskForm, model: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Полное наименование"
+  value={maskForm.fullName}
+  onChange={(e) => setMaskForm({ ...maskForm, fullName: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Артикул"
+  value={maskForm.article}
+  onChange={(e) => setMaskForm({ ...maskForm, article: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Размер смотрового окна"
+  value={maskForm.viewWindowSize}
+  onChange={(e) => setMaskForm({ ...maskForm, viewWindowSize: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Площадь видимой области"
+  value={maskForm.visibleArea}
+  onChange={(e) => setMaskForm({ ...maskForm, visibleArea: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="number"
+  placeholder="Количество сенсоров"
+  value={maskForm.sensorsCount}
+  onChange={(e) => setMaskForm({ ...maskForm, sensorsCount: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Степени затемнения"
+  value={maskForm.shadeLevel}
+  onChange={(e) => setMaskForm({ ...maskForm, shadeLevel: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Светлое состояние"
+  value={maskForm.lightState}
+  onChange={(e) => setMaskForm({ ...maskForm, lightState: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Подходящие виды сварки"
+  value={maskForm.weldingTypes}
+  onChange={(e) => setMaskForm({ ...maskForm, weldingTypes: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Время срабатывания"
+  value={maskForm.responseTime}
+  onChange={(e) => setMaskForm({ ...maskForm, responseTime: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Температура эксплуатации"
+  value={maskForm.operatingTemp}
+  onChange={(e) => setMaskForm({ ...maskForm, operatingTemp: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Регулировка затемнения"
+  value={maskForm.shadeAdjustment}
+  onChange={(e) => setMaskForm({ ...maskForm, shadeAdjustment: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Индикатор низкого заряда батареи"
+  value={maskForm.batteryIndicator}
+  onChange={(e) => setMaskForm({ ...maskForm, batteryIndicator: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Регулировка чувствительности"
+  value={maskForm.sensitivityAdjustment}
+  onChange={(e) => setMaskForm({ ...maskForm, sensitivityAdjustment: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Регулировка времени задержки"
+  value={maskForm.delayAdjustment}
+  onChange={(e) => setMaskForm({ ...maskForm, delayAdjustment: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Кнопка тест"
+  value={maskForm.testButton}
+  onChange={(e) => setMaskForm({ ...maskForm, testButton: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Технология естественной цветопередачи HD COLOR"
+  value={maskForm.hdColorTech}
+  onChange={(e) => setMaskForm({ ...maskForm, hdColorTech: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Функция «GRADIENT»"
+  value={maskForm.gradientFunction}
+  onChange={(e) => setMaskForm({ ...maskForm, gradientFunction: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Память режимов"
+  value={maskForm.memoryModes}
+  onChange={(e) => setMaskForm({ ...maskForm, memoryModes: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Оптический класс"
+  value={maskForm.opticalClass}
+  onChange={(e) => setMaskForm({ ...maskForm, opticalClass: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Оголовье"
+  value={maskForm.headband}
+  onChange={(e) => setMaskForm({ ...maskForm, headband: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Корпус"
+  value={maskForm.body}
+  onChange={(e) => setMaskForm({ ...maskForm, body: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Технология защиты корпуса S-FIRE"
+  value={maskForm.sFireProtection}
+  onChange={(e) => setMaskForm({ ...maskForm, sFireProtection: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Масса нетто, кг"
+  value={maskForm.weight}
+  onChange={(e) => setMaskForm({ ...maskForm, weight: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Розничная цена"
+  value={maskForm.retailPrice}
+  onChange={(e) => setMaskForm({ ...maskForm, retailPrice: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Высота упаковки мм"
+  value={maskForm.packageHeight}
+  onChange={(e) => setMaskForm({ ...maskForm, packageHeight: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Ширина упаковки мм"
+  value={maskForm.packageWidth}
+  onChange={(e) => setMaskForm({ ...maskForm, packageWidth: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
+  placeholder="Длинна упаковки мм"
+  value={maskForm.packageLength}
+  onChange={(e) => setMaskForm({ ...maskForm, packageLength: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
               <h3 className="text-xl font-semibold text-black">
                 Доп. характеристики
               </h3>
@@ -933,131 +1060,106 @@ function App() {
             </div>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse">
-                <thead>
-                  <tr className="bg-lime-100">
-                    <th className="p-4 text-left text-black font-semibold">
-                      ID
-                    </th>
-                    <th className="p-4 text-left text-black font-semibold">
-                      Название
-                    </th>
-                    <th className="p-4 text-left text-black font-semibold">
-                      Инструкции
-                    </th>
-                    <th className="p-4 text-left text-black font-semibold">
-                      Изображение
-                    </th>
-                    <th className="p-4 text-left text-black font-semibold">
-                      Цена
-                    </th>
-                    <th className="p-4 text-left text-black font-semibold">
-                      Вес
-                    </th>
-                    <th className="p-4 text-left text-black font-semibold">
-                      Область обзора
-                    </th>
-                    <th className="p-4 text-left text-black font-semibold">
-                      Сенсоры
-                    </th>
-                    <th className="p-4 text-left text-black font-semibold">
-                      Питание
-                    </th>
-                    <th className="p-4 text-left text-black font-semibold">
-                      Диапазон затемнения
-                    </th>
-                    <th className="p-4 text-left text-black font-semibold">
-                      Материал
-                    </th>
-                    <th className="p-4 text-left text-black font-semibold">
-                      Описание
-                    </th>
-                    <th className="p-4 text-left text-black font-semibold">
-                      Ссылка
-                    </th>
-                    <th className="p-4 text-left text-black font-semibold">
-                      Рассрочка
-                    </th>
-                    <th className="p-4 text-left text-black font-semibold">
-                      Размер
-                    </th>
-                    <th className="p-4 text-left text-black font-semibold">
-                      Дни доставки
-                    </th>
-                    <th className="p-4 text-left text-black font-semibold">
-                      Доп. характеристики
-                    </th>
-                    <th className="p-4 text-left text-black font-semibold">
-                      Действия
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {masks.map((mask, index) => (
-                    <tr
-                      key={mask.id}
-                      className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
-                    >
-                      <td className="p-4 text-black">{mask.id}</td>
-                      <td className="p-4 text-black">{mask.name}</td>
-                      <td className="p-4 text-black">
-                        {mask.instructions ?? "-"}
-                      </td>
-                      <td className="p-4 text-black">
-                        {mask.imageUrl ? (
-                          <img src={mask.imageUrl} alt="" className="h-12" />
-                        ) : (
-                          "-"
-                        )}
-                      </td>
-                      <td className="p-4 text-black">{mask.price ?? "-"}</td>
-                      <td className="p-4 text-black">{mask.weight ?? "-"}</td>
-                      <td className="p-4 text-black">{mask.viewArea ?? "-"}</td>
-                      <td className="p-4 text-black">{mask.sensors ?? "-"}</td>
-                      <td className="p-4 text-black">{mask.power ?? "-"}</td>
-                      <td className="p-4 text-black">
-                        {mask.shadeRange ?? "-"}
-                      </td>
-                      <td className="p-4 text-black">{mask.material ?? "-"}</td>
-                      <td className="p-4 text-black">
-                        {mask.description ?? "-"}
-                      </td>
-                      <td className="p-4 text-black">{mask.link ?? "-"}</td>
-                      <td className="p-4 text-black">
-                        {mask.installment ?? "-"}
-                      </td>
-                      <td className="p-4 text-black">{mask.size ?? "-"}</td>
-
-                      <td className="p-4 text-black">{mask.days ?? "-"}</td>
-                      <td className="p-4 text-black">
-                        {mask && mask.extraFields && mask.extraFields?.length > 0 ? (
-                          <ul className="space-y-1">
-                            {mask.extraFields.map((f, i) => (
-                              <li key={i}>
-                                <strong>{f.key}:</strong> {f.value}
-                              </li>
-                            ))}
-                          </ul>
-                        ) : (
-                          "-"
-                        )}
-                      </td>
-                      <td className="p-4">
-                        <button
-                          onClick={() => handleMaskEdit(mask)}
-                          className="mr-4 text-lime-400 hover:text-lime-500 transition-colors"
-                        >
-                          Редактировать
-                        </button>
-                        <button
-                          onClick={() => handleMaskDelete(mask.id)}
-                          className="text-red-500 hover:text-red-600 transition-colors"
-                        >
-                          Удалить
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+              <thead>
+  <tr className="bg-lime-100">
+    <th className="p-4 text-left text-black font-semibold">ID</th>
+    <th className="p-4 text-left text-black font-semibold">Модель</th>
+    <th className="p-4 text-left text-black font-semibold">Полное наименование</th>
+    <th className="p-4 text-left text-black font-semibold">Артикул</th>
+    <th className="p-4 text-left text-black font-semibold">Размер смотрового окна</th>
+    <th className="p-4 text-left text-black font-semibold">Площадь видимой области</th>
+    <th className="p-4 text-left text-black font-semibold">Количество сенсоров</th>
+    <th className="p-4 text-left text-black font-semibold">Степени затемнения</th>
+    <th className="p-4 text-left text-black font-semibold">Светлое состояние</th>
+    <th className="p-4 text-left text-black font-semibold">Подходящие виды сварки</th>
+    <th className="p-4 text-left text-black font-semibold">Время срабатывания</th>
+    <th className="p-4 text-left text-black font-semibold">Температура эксплуатации</th>
+    <th className="p-4 text-left text-black font-semibold">Регулировка затемнения</th>
+    <th className="p-4 text-left text-black font-semibold">Индикатор батареи</th>
+    <th className="p-4 text-left text-black font-semibold">Регулировка чувствительности</th>
+    <th className="p-4 text-left text-black font-semibold">Регулировка времени задержки</th>
+    <th className="p-4 text-left text-black font-semibold">Кнопка тест</th>
+    <th className="p-4 text-left text-black font-semibold">HD COLOR</th>
+    <th className="p-4 text-left text-black font-semibold">Функция GRADIENT</th>
+    <th className="p-4 text-left text-black font-semibold">Память режимов</th>
+    <th className="p-4 text-left text-black font-semibold">Оптический класс</th>
+    <th className="p-4 text-left text-black font-semibold">Оголовье</th>
+    <th className="p-4 text-left text-black font-semibold">Корпус</th>
+    <th className="p-4 text-left text-black font-semibold">S-FIRE защита</th>
+    <th className="p-4 text-left text-black font-semibold">Масса нетто, кг</th>
+    <th className="p-4 text-left text-black font-semibold">Розничная цена</th>
+    <th className="p-4 text-left text-black font-semibold">Высота упаковки мм</th>
+    <th className="p-4 text-left text-black font-semibold">Ширина упаковки мм</th>
+    <th className="p-4 text-left text-black font-semibold">Длинна упаковки мм</th>
+    <th className="p-4 text-left text-black font-semibold">Доп. характеристики</th>
+    <th className="p-4 text-left text-black font-semibold">Действия</th>
+  </tr>
+</thead>
+<tbody>
+  {masks.map((mask, index) => (
+    <tr
+      key={mask.id}
+      className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+    >
+      <td className="p-4 text-black">{mask.id}</td>
+      <td className="p-4 text-black">{mask.model ?? "-"}</td>
+      <td className="p-4 text-black">{mask.fullName ?? "-"}</td>
+      <td className="p-4 text-black">{mask.article ?? "-"}</td>
+      <td className="p-4 text-black">{mask.viewWindowSize ?? "-"}</td>
+      <td className="p-4 text-black">{mask.visibleArea ?? "-"}</td>
+      <td className="p-4 text-black">{mask.sensorsCount ?? "-"}</td>
+      <td className="p-4 text-black">{mask.shadeLevel ?? "-"}</td>
+      <td className="p-4 text-black">{mask.lightState ?? "-"}</td>
+      <td className="p-4 text-black">{mask.weldingTypes ?? "-"}</td>
+      <td className="p-4 text-black">{mask.responseTime ?? "-"}</td>
+      <td className="p-4 text-black">{mask.operatingTemp ?? "-"}</td>
+      <td className="p-4 text-black">{mask.shadeAdjustment ?? "-"}</td>
+      <td className="p-4 text-black">{mask.batteryIndicator ?? "-"}</td>
+      <td className="p-4 text-black">{mask.sensitivityAdjustment ?? "-"}</td>
+      <td className="p-4 text-black">{mask.delayAdjustment ?? "-"}</td>
+      <td className="p-4 text-black">{mask.testButton ?? "-"}</td>
+      <td className="p-4 text-black">{mask.hdColorTech ?? "-"}</td>
+      <td className="p-4 text-black">{mask.gradientFunction ?? "-"}</td>
+      <td className="p-4 text-black">{mask.memoryModes ?? "-"}</td>
+      <td className="p-4 text-black">{mask.opticalClass ?? "-"}</td>
+      <td className="p-4 text-black">{mask.headband ?? "-"}</td>
+      <td className="p-4 text-black">{mask.body ?? "-"}</td>
+      <td className="p-4 text-black">{mask.sFireProtection ?? "-"}</td>
+      <td className="p-4 text-black">{mask.weight ?? "-"}</td>
+      <td className="p-4 text-black">{mask.retailPrice ?? "-"}</td>
+      <td className="p-4 text-black">{mask.packageHeight ?? "-"}</td>
+      <td className="p-4 text-black">{mask.packageWidth ?? "-"}</td>
+      <td className="p-4 text-black">{mask.packageLength ?? "-"}</td>
+      <td className="p-4 text-black">
+        {mask && mask.ExtraField && mask.ExtraField?.length > 0 ? (
+          <ul className="space-y-1">
+            {mask.ExtraField.map((f, i) => (
+              <li key={i}>
+                <strong>{f.key}:</strong> {f.value}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          "-"
+        )}
+      </td>
+      <td className="p-4">
+        <button
+          onClick={() => handleMaskEdit(mask)}
+          className="mr-4 text-lime-400 hover:text-lime-500 transition-colors"
+        >
+          Редактировать
+        </button>
+        <button
+          onClick={() => handleMaskDelete(mask.id)}
+          className="text-red-500 hover:text-red-600 transition-colors"
+        >
+          Удалить
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
               </table>
             </div>
           </div>
@@ -1257,7 +1359,7 @@ function App() {
                 <option value="">Выберите маску</option>
                 {masks.map((mask) => (
                   <option key={mask.id} value={mask.id}>
-                    {mask.name} (ID: {mask.id})
+                    {mask.fullName} (ID: {mask.id})
                   </option>
                 ))}
               </select>
@@ -1317,7 +1419,7 @@ function App() {
                       <td className="p-4 text-black">{user.email ?? "-"}</td>
                       <td className="p-4 text-black">
                         {user.mask
-                          ? `${user.mask.name} (ID: ${user.maskId})`
+                          ? `${user.mask.fullName} (ID: ${user.maskId})`
                           : "-"}
                       </td>
                       <td className="p-4">
@@ -1367,7 +1469,7 @@ function App() {
                 <option value="">Выберите маску</option>
                 {masks.map((mask) => (
                   <option key={mask.id} value={mask.id}>
-                    {mask.name} (ID: {mask.id})
+                    {mask.fullName} (ID: {mask.id})
                   </option>
                 ))}
               </select>
@@ -1470,7 +1572,7 @@ function App() {
                 <option value="">Выберите маску</option>
                 {masks.map((mask) => (
                   <option key={mask.id} value={mask.id}>
-                    {mask.name} (ID: {mask.id})
+                    {mask.fullName} (ID: {mask.id})
                   </option>
                 ))}
               </select>
