@@ -1,45 +1,50 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
 import axios, { type AxiosResponse } from "axios";
 import "./App.css";
 
 // Интерфейсы для типизации
-interface Mask {
+export interface ExtraField {
   id: number;
-  ExtraField?: {
-    id: number;
-    key: string;
-    value: string;
-  }[];
-  model: string;
-  fullName: string;
-  article: string;
-  viewWindowSize: string | null;
-  visibleArea: string | null;
-  sensorsCount: number | null;
-  shadeLevel: string | null;
-  lightState: string | null;
-  weldingTypes: string | null;
-  responseTime: string | null;
-  operatingTemp: string | null;
-  shadeAdjustment: string | null;
-  batteryIndicator: string | null;
-  sensitivityAdjustment: string | null;
-  delayAdjustment: string | null;
-  testButton: string | null;
-  hdColorTech: string | null;
-  gradientFunction: string | null;
-  memoryModes: string | null;
-  opticalClass: string | null;
-  headband: string | null;
-  body: string | null;
-  sFireProtection: string | null;
-  weight: string | null;
-  retailPrice: string | null;
-  packageHeight: string | null;
-  packageWidth: string | null;
-  packageLength: string | null;
-  features: Feature[];
-  reviews: Review[];
+  key: string;
+  value: string;
+  maskId: number;
+}
+
+export interface Mask {
+  id: number;
+  name: string;
+  instructions?: string;
+  description?: string;
+  imageUrl?: string;
+  price?: string;
+  weight?: string;
+  viewArea?: string;
+  sensors?: number;
+  power?: string;
+  shadeRange?: string;
+  material?: string;
+  installment?: string;
+  size?: string;
+  days?: string;
+  operatingTemp?: string;
+  weldingTypes?: string;
+  responseTime?: string;
+  shadeAdjustment?: string;
+  batteryIndicator?: string;
+  sensitivityAdjustment?: string;
+  delayAdjustment?: string;
+  testButton?: string;
+  hdColorTech?: string;
+  gradientFunction?: string;
+  memoryModes?: string;
+  opticalClass?: string;
+  headband?: string;
+  sFireProtection?: string;
+  packageHeight?: string;
+  packageWidth?: string;
+  packageLength?: string;
+  ExtraField?: ExtraField[];
 }
 
 interface Video {
@@ -243,39 +248,67 @@ function App() {
       setError("Неверный логин или пароль");
     }
   };
-  const handleMaskEdit = (mask: Mask): void => {
-    setMaskForm({
-      model: mask.model || "",
-      fullName: mask.fullName || "",
-      article: mask.article || "",
-      viewWindowSize: mask.viewWindowSize || "",
-      visibleArea: mask.visibleArea || "",
-      sensorsCount: mask.sensorsCount?.toString() || "",
-      shadeLevel: mask.shadeLevel || "",
-      lightState: mask.lightState || "",
-      weldingTypes: mask.weldingTypes || "",
-      responseTime: mask.responseTime || "",
-      operatingTemp: mask.operatingTemp || "",
-      shadeAdjustment: mask.shadeAdjustment || "",
-      batteryIndicator: mask.batteryIndicator || "",
-      sensitivityAdjustment: mask.sensitivityAdjustment || "",
-      delayAdjustment: mask.delayAdjustment || "",
-      testButton: mask.testButton || "",
-      hdColorTech: mask.hdColorTech || "",
-      gradientFunction: mask.gradientFunction || "",
-      memoryModes: mask.memoryModes || "",
-      opticalClass: mask.opticalClass || "",
-      headband: mask.headband || "",
-      body: mask.body || "",
-      sFireProtection: mask.sFireProtection || "",
-      weight: mask.weight || "",
-      retailPrice: mask.retailPrice || "",
-      packageHeight: mask.packageHeight || "",
-      packageWidth: mask.packageWidth || "",
-      packageLength: mask.packageLength || "",
-    });
-    setMaskEditingId(mask.id);
+const handleMaskEdit = (mask: any): void => {
+  const getExtraValue = (key: string) => {
+    const field = mask.ExtraField?.find((f: any) => f.key === key);
+    return field ? field.value : "";
   };
+
+  setMaskForm({
+    model: mask.name || "",
+    fullName: mask.instructions || "",
+    article: mask.description || "",
+    viewWindowSize: getExtraValue("Размер смотрового окна") || "",
+    visibleArea: mask.viewArea || "",
+    sensorsCount: mask.sensors?.toString() || "",
+    shadeLevel: mask.shadeRange || "",
+    lightState: mask.power || "",
+    weldingTypes: mask.weldingTypes || "",
+    responseTime: getExtraValue("Время срабатывания") || "",
+    operatingTemp: mask.operatingTemp || "",
+    shadeAdjustment: getExtraValue("Регулировка затемнения") || "",
+    batteryIndicator: getExtraValue("Индикатор батареи") || "",
+    sensitivityAdjustment: getExtraValue("Регулировка чувствительности") || "",
+    delayAdjustment: getExtraValue("Регулировка времени задержки") || "",
+    testButton: getExtraValue("Кнопка тест") || "",
+    hdColorTech: getExtraValue("HD COLOR") || "",
+    gradientFunction: getExtraValue("GRADIENT") || "",
+    memoryModes: getExtraValue("Память режимов") || "",
+    opticalClass: getExtraValue("Оптический класс") || "",
+    headband: getExtraValue("Оголовье") || "",
+    body: mask.material || "",
+    sFireProtection: mask.sFireProtection || "",
+    weight: mask.weight || "",
+    retailPrice: mask.price || "",
+    packageHeight: mask.packageHeight || "",
+    packageWidth: mask.packageWidth || "",
+    packageLength: mask.packageLength || "",
+  });
+
+  setExtraFields(
+    mask.ExtraField?.filter(
+      (f: any) =>
+        ![
+          "Размер смотрового окна",
+          "Время срабатывания",
+          "Регулировка затемнения",
+          "Индикатор батареи",
+          "Регулировка чувствительности",
+          "Регулировка времени задержки",
+          "Кнопка тест",
+          "HD COLOR",
+          "GRADIENT",
+          "Память режимов",
+          "Оптический класс",
+          "Оголовье",
+        ].includes(f.key)
+    ) || []
+  );
+
+  setMaskEditingId(mask.id);
+};
+
+
   // Функции для настроек
   const fetchSettings = async (): Promise<void> => {
     try {
@@ -1101,35 +1134,34 @@ function App() {
       key={mask.id}
       className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
     >
-      <td className="p-4 text-black">{mask.id}</td>
-      <td className="p-4 text-black">{mask.model ?? "-"}</td>
-      <td className="p-4 text-black">{mask.fullName ?? "-"}</td>
-      <td className="p-4 text-black">{mask.article ?? "-"}</td>
-      <td className="p-4 text-black">{mask.viewWindowSize ?? "-"}</td>
-      <td className="p-4 text-black">{mask.visibleArea ?? "-"}</td>
-      <td className="p-4 text-black">{mask.sensorsCount ?? "-"}</td>
-      <td className="p-4 text-black">{mask.shadeLevel ?? "-"}</td>
-      <td className="p-4 text-black">{mask.lightState ?? "-"}</td>
-      <td className="p-4 text-black">{mask.weldingTypes ?? "-"}</td>
-      <td className="p-4 text-black">{mask.responseTime ?? "-"}</td>
-      <td className="p-4 text-black">{mask.operatingTemp ?? "-"}</td>
-      <td className="p-4 text-black">{mask.shadeAdjustment ?? "-"}</td>
-      <td className="p-4 text-black">{mask.batteryIndicator ?? "-"}</td>
-      <td className="p-4 text-black">{mask.sensitivityAdjustment ?? "-"}</td>
-      <td className="p-4 text-black">{mask.delayAdjustment ?? "-"}</td>
-      <td className="p-4 text-black">{mask.testButton ?? "-"}</td>
-      <td className="p-4 text-black">{mask.hdColorTech ?? "-"}</td>
-      <td className="p-4 text-black">{mask.gradientFunction ?? "-"}</td>
-      <td className="p-4 text-black">{mask.memoryModes ?? "-"}</td>
-      <td className="p-4 text-black">{mask.opticalClass ?? "-"}</td>
-      <td className="p-4 text-black">{mask.headband ?? "-"}</td>
-      <td className="p-4 text-black">{mask.body ?? "-"}</td>
-      <td className="p-4 text-black">{mask.sFireProtection ?? "-"}</td>
-      <td className="p-4 text-black">{mask.weight ?? "-"}</td>
-      <td className="p-4 text-black">{mask.retailPrice ?? "-"}</td>
-      <td className="p-4 text-black">{mask.packageHeight ?? "-"}</td>
-      <td className="p-4 text-black">{mask.packageWidth ?? "-"}</td>
-      <td className="p-4 text-black">{mask.packageLength ?? "-"}</td>
+  <td className="p-4 text-black">{mask.id}</td>
+<td className="p-4 text-black">{mask.name ?? "-"}</td>
+<td className="p-4 text-black">{mask.instructions ?? "-"}</td>
+<td className="p-4 text-black">{mask.description ?? "-"}</td>
+<td className="p-4 text-black">{mask.viewArea ?? "-"}</td>
+<td className="p-4 text-black">{mask.sensors ?? "-"}</td>
+<td className="p-4 text-black">{mask.shadeRange ?? "-"}</td>
+<td className="p-4 text-black">{mask.power ?? "-"}</td>
+<td className="p-4 text-black">{mask.weldingTypes ?? "-"}</td>
+<td className="p-4 text-black">{mask.responseTime ?? "-"}</td>
+<td className="p-4 text-black">{mask.operatingTemp ?? "-"}</td>
+<td className="p-4 text-black">{mask.batteryIndicator ?? "-"}</td>
+<td className="p-4 text-black">{mask.sensitivityAdjustment ?? "-"}</td>
+<td className="p-4 text-black">{mask.delayAdjustment ?? "-"}</td>
+<td className="p-4 text-black">{mask.testButton ?? "-"}</td>
+<td className="p-4 text-black">{mask.hdColorTech ?? "-"}</td>
+<td className="p-4 text-black">{mask.gradientFunction ?? "-"}</td>
+<td className="p-4 text-black">{mask.memoryModes ?? "-"}</td>
+<td className="p-4 text-black">{mask.opticalClass ?? "-"}</td>
+<td className="p-4 text-black">{mask.headband ?? "-"}</td>
+<td className="p-4 text-black">{mask.material ?? "-"}</td>
+<td className="p-4 text-black">{mask.sFireProtection ?? "-"}</td>
+<td className="p-4 text-black">{mask.weight ?? "-"}</td>
+<td className="p-4 text-black">{mask.price ?? "-"}</td>
+<td className="p-4 text-black">{mask.packageHeight ?? "-"}</td>
+<td className="p-4 text-black">{mask.packageWidth ?? "-"}</td>
+<td className="p-4 text-black">{mask.packageLength ?? "-"}</td>
+
       <td className="p-4 text-black">
         {mask && mask.ExtraField && mask.ExtraField?.length > 0 ? (
           <ul className="space-y-1">
@@ -1359,7 +1391,7 @@ function App() {
                 <option value="">Выберите маску</option>
                 {masks.map((mask) => (
                   <option key={mask.id} value={mask.id}>
-                    {mask.fullName} (ID: {mask.id})
+                   (ID: {mask.id})
                   </option>
                 ))}
               </select>
@@ -1417,11 +1449,7 @@ function App() {
                       </td>
                       <td className="p-4 text-black">{user.phone ?? "-"}</td>
                       <td className="p-4 text-black">{user.email ?? "-"}</td>
-                      <td className="p-4 text-black">
-                        {user.mask
-                          ? `${user.mask.fullName} (ID: ${user.maskId})`
-                          : "-"}
-                      </td>
+                   
                       <td className="p-4">
                         <button
                           onClick={() => handleUserEdit(user)}
@@ -1469,7 +1497,7 @@ function App() {
                 <option value="">Выберите маску</option>
                 {masks.map((mask) => (
                   <option key={mask.id} value={mask.id}>
-                    {mask.fullName} (ID: {mask.id})
+                    (ID: {mask.id})
                   </option>
                 ))}
               </select>
@@ -1572,7 +1600,7 @@ function App() {
                 <option value="">Выберите маску</option>
                 {masks.map((mask) => (
                   <option key={mask.id} value={mask.id}>
-                    {mask.fullName} (ID: {mask.id})
+                  (ID: {mask.id})
                   </option>
                 ))}
               </select>
