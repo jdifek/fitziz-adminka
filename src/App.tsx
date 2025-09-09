@@ -84,6 +84,7 @@ interface MaskForm {
   model: string;              // Модель сварочной маски
   fullName: string;           // Полное наименование
   article: string;            // Артикул
+  imageUrl: string;            // Артикул
   viewWindowSize: string;     // Размер смотрового окна
   visibleArea: string;        // Площадь видимой области
   sensorsCount: string;       // Количество сенсоров
@@ -175,6 +176,7 @@ function App() {
     sensitivityAdjustment: "",
     delayAdjustment: "",
     testButton: "",
+    imageUrl: "",
     hdColorTech: "",
     gradientFunction: "",
     memoryModes: "",
@@ -257,6 +259,7 @@ const handleMaskEdit = (mask: any): void => {
   setMaskForm({
     model: mask.name || "",
     fullName: mask.instructions || "",
+    imageUrl: mask.imageUrl || "",
     article: mask.description || "",
     viewWindowSize: getExtraValue("Размер смотрового окна") || "",
     visibleArea: mask.viewArea || "",
@@ -409,6 +412,7 @@ const handleMaskEdit = (mask: any): void => {
         operatingTemp: "",
         shadeAdjustment: "",
         batteryIndicator: "",
+        imageUrl: "",
         sensitivityAdjustment: "",
         delayAdjustment: "",
         testButton: "",
@@ -852,6 +856,13 @@ const handleMaskEdit = (mask: any): void => {
 />
 <input
   type="text"
+  placeholder="Фото"
+  value={maskForm.imageUrl}
+  onChange={(e) => setMaskForm({ ...maskForm, imageUrl: e.target.value })}
+  className="flex-1 min-w-[200px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-lime-400 transition-colors text-black placeholder:text-black/60"
+/>
+<input
+  type="text"
   placeholder="Артикул"
   value={maskForm.article}
   onChange={(e) => setMaskForm({ ...maskForm, article: e.target.value })}
@@ -1098,6 +1109,7 @@ const handleMaskEdit = (mask: any): void => {
     <th className="p-4 text-left text-black font-semibold">ID</th>
     <th className="p-4 text-left text-black font-semibold">Модель</th>
     <th className="p-4 text-left text-black font-semibold">Полное наименование</th>
+    <th className="p-4 text-left text-black font-semibold">Картинка</th>
     <th className="p-4 text-left text-black font-semibold">Артикул</th>
     <th className="p-4 text-left text-black font-semibold">Размер смотрового окна</th>
     <th className="p-4 text-left text-black font-semibold">Площадь видимой области</th>
@@ -1137,7 +1149,17 @@ const handleMaskEdit = (mask: any): void => {
   <td className="p-4 text-black">{mask.id}</td>
 <td className="p-4 text-black">{mask.name ?? "-"}</td>
 <td className="p-4 text-black">{mask.instructions ?? "-"}</td>
-<td className="p-4 text-black">{mask.description ?? "-"}</td>
+<td className="p-4 text-black">
+  {mask.imageUrl ? (
+    <img
+      src={mask.imageUrl}
+      alt="preview"
+      className="max-w-[120px] max-h-[80px] object-contain"
+    />
+  ) : (
+    "-"
+  )}
+</td><td className="p-4 text-black">{mask.description ?? "-"}</td>
 <td className="p-4 text-black">{mask.viewArea ?? "-"}</td>
 <td className="p-4 text-black">{mask.sensors ?? "-"}</td>
 <td className="p-4 text-black">{mask.shadeRange ?? "-"}</td>
@@ -1422,15 +1444,10 @@ const handleMaskEdit = (mask: any): void => {
                     <th className="p-4 text-left text-black font-semibold">
                       Имя
                     </th>
-                    <th className="p-4 text-left text-black font-semibold">
-                      Телефон
-                    </th>
-                    <th className="p-4 text-left text-black font-semibold">
-                      Email
-                    </th>
-                    <th className="p-4 text-left text-black font-semibold">
+                   
+                    {/* <th className="p-4 text-left text-black font-semibold">
                       Маска
-                    </th>
+                    </th> */}
                     <th className="p-4 text-left text-black font-semibold">
                       Действия
                     </th>
@@ -1447,8 +1464,7 @@ const handleMaskEdit = (mask: any): void => {
                       <td className="p-4 text-black">
                         {user.firstName ?? "-"}
                       </td>
-                      <td className="p-4 text-black">{user.phone ?? "-"}</td>
-                      <td className="p-4 text-black">{user.email ?? "-"}</td>
+                 
                    
                       <td className="p-4">
                         <button
